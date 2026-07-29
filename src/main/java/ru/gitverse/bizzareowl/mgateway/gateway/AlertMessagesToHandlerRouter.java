@@ -1,5 +1,6 @@
 package ru.gitverse.bizzareowl.mgateway.gateway;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.gitverse.bizzareowl.mgateway.configuration.properties.AlertMessagesToHandlersProperties;
@@ -10,21 +11,20 @@ import java.util.Map;
 @Component
 public final class AlertMessagesToHandlerRouter {
 
+    @Getter
     private final Map<Integer, AlertMessageHandler> alertMessageHandlerMap;
 
-    private AlertMessageHandler alertMessageHandler;
+    private final AlertMessageHandler alertMessageHandler;
 
     @Autowired
-    public AlertMessagesToHandlerRouter(final AlertMessageHandler alertMessageHandler, final AlertMessagesToHandlersProperties alertMessagesToHandlersProperties) {
-        this.alertMessageHandler = alertMessageHandler;
-        this(alertMessagesToHandlersProperties);
-    }
+    public AlertMessagesToHandlerRouter(final AlertMessageHandler alertMessageHandler,
+                                        final AlertMessagesToHandlersProperties alertMessagesToHandlersProperties) {
 
-    private AlertMessagesToHandlerRouter(final AlertMessagesToHandlersProperties alertMessagesToHandlersProperties) {
+        this.alertMessageHandler = alertMessageHandler;
         this.alertMessageHandlerMap = new HashMap<>();
 
         alertMessagesToHandlersProperties.getTelegram().forEach(id -> {
-            alertMessageHandlerMap.putIfAbsent(id, alertMessageHandler);
+            alertMessageHandlerMap.putIfAbsent(id, this.alertMessageHandler);
         });
     }
 
@@ -35,6 +35,5 @@ public final class AlertMessagesToHandlerRouter {
 
         return this.alertMessageHandlerMap.get(sourceId);
     }
-
 
 }
