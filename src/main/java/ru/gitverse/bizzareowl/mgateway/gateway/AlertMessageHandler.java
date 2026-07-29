@@ -14,9 +14,10 @@ public abstract class AlertMessageHandler {
 
     protected abstract ProcessedAlertMessage processMessage(final RawAlertMessage rawAlertMessage);
 
-    public void handle(final RawAlertMessage rawAlertMessage) {
+    public ProcessedAlertMessage handle(final RawAlertMessage rawAlertMessage) {
         final ProcessedAlertMessage processedAlertMessage = processMessage(Objects.requireNonNull(rawAlertMessage));
         alertMessageSender.sendProcessedMessage(processedAlertMessage);
+        return processedAlertMessage;
     }
 
 }
