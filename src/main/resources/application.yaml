@@ -1,9 +1,5 @@
 application:
   alert-messages-topic: alerts
-mgateway:
-  sources:
-    telegram:
-      - 101
 spring:
   kafka:
     bootstrap-servers:

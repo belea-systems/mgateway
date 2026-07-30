@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.gitverse.bizzareowl.mgateway.gateway.AlertMessagesToHandlerRouter;
+import ru.gitverse.bizzareowl.mgateway.gateway.AlertMessageHandler;
 import ru.gitverse.bizzareowl.mgateway.gateway.ProcessedAlertMessage;
 import ru.gitverse.bizzareowl.mgateway.web.dto.MessageSavedResponseDto;
 import ru.gitverse.bizzareowl.mgateway.web.dto.RawAlertMessageDto;
@@ -20,7 +20,7 @@ import ru.gitverse.bizzareowl.mgateway.web.dto.mappers.RawAlertMassageDtoMapper;
 @RequiredArgsConstructor
 public class MessageControllerImpl implements MessageController {
 
-    private final AlertMessagesToHandlerRouter alertMessagesToHandlerRouter;
+    private final AlertMessageHandler alertMessageHandler;
 
     private final RawAlertMassageDtoMapper rawAlertMassageDtoMapper = Mappers.getMapper(RawAlertMassageDtoMapper.class);
 
@@ -28,9 +28,7 @@ public class MessageControllerImpl implements MessageController {
     @PostMapping
     @Override
     public MessageSavedResponseDto sendMessage(@Valid @RequestBody RawAlertMessageDto rawAlertMessageDto) {
-        final ProcessedAlertMessage processedAlertMessage = alertMessagesToHandlerRouter.route(rawAlertMessageDto.sourceId())
-                .handle(rawAlertMassageDtoMapper.toDomain(rawAlertMessageDto));
-
+        final ProcessedAlertMessage processedAlertMessage = alertMessageHandler.handle(rawAlertMassageDtoMapper.toDomain(rawAlertMessageDto));
         return new MessageSavedResponseDto(processedAlertMessage.id());
     }
 
