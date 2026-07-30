@@ -1,7 +1,7 @@
 package ru.gitverse.bizzareowl.mgateway.gateway;
 
 import ru.gitverse.bizzareowl.mgateway.messaging.AlertMessageSender;
-import ru.gitverse.bizzareowl.mgateway.messaging.ProcessedAlertMessage;
+
 import java.util.Objects;
 
 public abstract class AlertMessageHandler {

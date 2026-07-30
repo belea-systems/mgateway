@@ -1,0 +1,10 @@
+  spring:
+    kafka:
+      consumer:
+        key-deserializer: org.springframework.kafka.support.serializer.ParseStringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+        properties:
+          spring.json.trusted.packages: "*"
+          spring.message.key.parser: ru.gitverse.bizzareowl.mgateway.messaging.AlertMessageSenderTest.parseUUIDDeserializer
+        group-id: test-group-id
+        client-id: test-client

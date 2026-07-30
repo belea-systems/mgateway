@@ -1,4 +1,4 @@
-package ru.gitverse.bizzareowl.mgateway.messaging;
+package ru.gitverse.bizzareowl.mgateway.gateway;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

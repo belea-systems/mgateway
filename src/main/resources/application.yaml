@@ -1,4 +1,13 @@
+application:
+  alert-messages-topic: alerts
 mgateway:
   sources:
     telegram:
       - 101
+spring:
+  kafka:
+    bootstrap-servers:
+      - localhost:3456
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.ToStringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer

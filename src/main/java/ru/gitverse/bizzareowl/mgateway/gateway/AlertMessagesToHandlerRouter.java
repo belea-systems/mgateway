@@ -23,7 +23,7 @@ public final class AlertMessagesToHandlerRouter {
         this.alertMessageHandler = alertMessageHandler;
         this.alertMessageHandlerMap = new HashMap<>();
 
-        alertMessagesToHandlersProperties.getTelegram().forEach(id -> {
+        alertMessagesToHandlersProperties.getSources().getTelegram().forEach(id -> {
             alertMessageHandlerMap.putIfAbsent(id, this.alertMessageHandler);
         });
     }

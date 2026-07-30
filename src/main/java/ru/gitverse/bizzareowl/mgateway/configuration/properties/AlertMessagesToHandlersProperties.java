@@ -15,6 +15,14 @@ import java.util.List;
 @Setter
 public class AlertMessagesToHandlersProperties {
 
-    private List<Integer> telegram;
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class SourcesList {
+        private List<Integer> telegram;
+    }
+
+    private SourcesList sources;
 
 }

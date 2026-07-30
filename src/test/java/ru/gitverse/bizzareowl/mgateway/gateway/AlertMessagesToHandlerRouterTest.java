@@ -10,8 +10,8 @@ import ru.gitverse.bizzareowl.mgateway.configuration.properties.AlertMessagesToH
 
 @SpringBootTest(
         properties = {
-                "mgateway.telegram[0]=100",
-                "mgateway.telegram[1]=101"
+                "mgateway.sources.telegram[0]=100",
+                "mgateway.sources.telegram[1]=101"
         })
 public class AlertMessagesToHandlerRouterTest {
 

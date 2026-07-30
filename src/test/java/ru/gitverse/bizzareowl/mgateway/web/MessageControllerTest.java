@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 import ru.gitverse.bizzareowl.mgateway.gateway.AlertMessageHandler;
 import ru.gitverse.bizzareowl.mgateway.gateway.AlertMessagesToHandlerRouter;
-import ru.gitverse.bizzareowl.mgateway.gateway.RawAlertMessage;
-import ru.gitverse.bizzareowl.mgateway.messaging.ProcessedAlertMessage;
+import ru.gitverse.bizzareowl.mgateway.gateway.ProcessedAlertMessage;
 import ru.gitverse.bizzareowl.mgateway.web.dto.RawAlertMessageDto;
 import tools.jackson.databind.ObjectMapper;
 
