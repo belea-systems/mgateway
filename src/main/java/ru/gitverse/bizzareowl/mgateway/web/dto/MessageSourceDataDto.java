@@ -1,6 +1,8 @@
 package ru.gitverse.bizzareowl.mgateway.web.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(
         name = "MessageSourceDataDto",
@@ -11,12 +13,16 @@ public record MessageSourceDataDto(
                 description = "Идентификатор источника сообщений в системе источника",
                 example = "19933748182"
         )
+        @NotBlank
+        @NotBlank
         String id,
 
         @Schema(
                 description = "Наименование источника сообщений",
                 example = "Белгородец"
         )
+        @NotNull
+        @NotBlank
         String name,
 
         @Schema(
@@ -26,6 +32,8 @@ public record MessageSourceDataDto(
                         "TELEGRAM"
                 }
         )
+        @NotNull
+        @NotBlank
         String source
 ) {
 }
