@@ -13,7 +13,7 @@ public record MessageSourceDataDto(
                 description = "Идентификатор источника сообщений в системе источника",
                 example = "19933748182"
         )
-        @NotBlank
+        @NotNull
         @NotBlank
         String id,
 
