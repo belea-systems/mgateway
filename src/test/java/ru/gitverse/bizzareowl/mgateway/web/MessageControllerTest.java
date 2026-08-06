@@ -1,22 +1,28 @@
 package ru.gitverse.bizzareowl.mgateway.web;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
+import ru.gitverse.bizzareowl.mgateway.configuration.SecurityConfig;
 import ru.gitverse.bizzareowl.mgateway.gateway.AlertMessageHandler;
 import ru.gitverse.bizzareowl.mgateway.gateway.MessageSource;
 import ru.gitverse.bizzareowl.mgateway.gateway.MessageSourceData;
 import ru.gitverse.bizzareowl.mgateway.gateway.ProcessedAlertMessage;
 import ru.gitverse.bizzareowl.mgateway.persistence.DeduplicationRepository;
 import ru.gitverse.bizzareowl.mgateway.persistence.entities.MessageDeduplicationRecordPrimaryKey;
+import ru.gitverse.bizzareowl.mgateway.security.JwtUtils;
 import ru.gitverse.bizzareowl.mgateway.web.dto.MessageSourceDataDto;
 import ru.gitverse.bizzareowl.mgateway.web.dto.RawAlertMessageDto;
 import tools.jackson.databind.ObjectMapper;
@@ -26,8 +32,25 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@WebMvcTest(MessageController.class)
+@WebMvcTest(
+        properties = {
+                "application.jwt.signature.secret-key=Z3NlZndkZGZmYWRzZGZhc2ZlcmYzZGZzYWRmYXNkZnN2ZmRmZ3NkYWR3ZWRmZWF3c2Zhd2Zkc3pmZXJzZ2RzZmZ3YWVkZmF3ZnNkZnNkYXdmcnNlZndlZnNkZmF3c2Vmd2Vmcw"
+        }, controllers = MessageController.class
+)
+@Import({
+        SecurityConfig.class, MessageControllerTest.TestConfig.class
+})
 public class MessageControllerTest {
+
+    @TestConfiguration
+    public static class TestConfig {
+
+        @Bean
+        public JwtUtils jwtUtils(@Value("${application.jwt.signature.secret-key}") String base64Key) {
+            return new JwtUtils(base64Key);
+        }
+
+    }
 
     @Autowired
     private MockMvcTester mockMvcTester;
@@ -43,6 +66,7 @@ public class MessageControllerTest {
 
     @Test
     @DisplayName("Send message with valid body test")
+    @WithMockUser
     public void sendMessage_withValidMessage_shouldSaveMessage() {
 
         final MessageSourceDataDto messageSourceDataDto = new MessageSourceDataDto("id", "name", "TELEGRAM");
@@ -55,7 +79,7 @@ public class MessageControllerTest {
                 )
         );
 
-        MvcTestResult testResult = mockMvcTester.post().uri("/emergency-alerts" )
+        MvcTestResult testResult = mockMvcTester.post().uri("/emergency-alerts")
                 .content(objectMapper.writeValueAsBytes(rawAlertMessageDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .exchange();
@@ -66,6 +90,7 @@ public class MessageControllerTest {
 
     @Test
     @DisplayName("Send message second time with valid body test")
+    @WithMockUser
     public void sendMessage_secondTimeWithValidMessage_shouldReturnNoContent() {
 
         final MessageSourceDataDto messageSourceDataDto = new MessageSourceDataDto("id", "name", "TELEGRAM");
@@ -75,7 +100,7 @@ public class MessageControllerTest {
                 new MessageDeduplicationRecordPrimaryKey("id", "id", MessageSource.TELEGRAM))
         ).thenReturn(true);
 
-        MvcTestResult testResult = mockMvcTester.post().uri("/emergency-alerts" )
+        MvcTestResult testResult = mockMvcTester.post().uri("/emergency-alerts")
                 .content(objectMapper.writeValueAsBytes(rawAlertMessageDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .exchange();
@@ -85,6 +110,7 @@ public class MessageControllerTest {
 
     @Test
     @DisplayName("Send message with invalid body test")
+    @WithMockUser
     public void sendMessage_withInvalidMessage_shouldDiscardMessage() {
 
         final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", null, null, null);
