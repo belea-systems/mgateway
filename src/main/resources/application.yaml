@@ -1,6 +1,11 @@
 application:
   alert-messages-topic: alerts
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/alert-deduplication
+    username: alerts
+    password: alerts
+    driver-class-name: org.postgresql.Driver
   kafka:
     bootstrap-servers:
       - localhost:3456
