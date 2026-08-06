@@ -26,6 +26,7 @@ import ru.gitverse.bizzareowl.mgateway.gateway.MessageSource;
 import ru.gitverse.bizzareowl.mgateway.gateway.MessageSourceData;
 import ru.gitverse.bizzareowl.mgateway.gateway.ProcessedAlertMessage;
 import ru.gitverse.bizzareowl.mgateway.persistence.DeduplicationRepository;
+import ru.gitverse.bizzareowl.mgateway.security.JwtUtils;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -43,6 +44,9 @@ public class AlertMessageSenderTest {
     // TODO: CHANGE TEST TO REMOVE THIS USELESS DEPENDENCY
     @MockitoBean
     private DeduplicationRepository deduplicationRepository;
+
+    @MockitoBean
+    private JwtUtils jwtUtils;
 
     @Value("${application.alert-messages-topic}")
     private String alertMessagesTopic;

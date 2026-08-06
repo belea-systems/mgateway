@@ -36,7 +36,9 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(properties = {
+        "application.jwt.signature.secret-key=1bUGQhHpJ8ezuKxyLurY7wBcJ9OxCpoaHwXN4XKneXV"
+})
 @EmbeddedKafka(topics = {
         "${application.alert-messages-topic}"
 })
@@ -84,6 +86,7 @@ public class E2EIntegrationTests {
 
         final MvcTestResult mvcTestResult = mockMvcTester.post()
                 .uri("/emergency-alerts")
+                .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.xGsnJRq4BKSbxJmsOY0Q4rc4oZJP-OSQrADxlaGztgs")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(rawAlertMessageDto))
                 .exchange();
