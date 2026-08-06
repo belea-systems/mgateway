@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 05082082116
+      author: bizzare_owl
+      changes:
+        - createTable:
+            remarks: 'Message deduplication table'
+            tableName: message_deduplication_record
+            columns:
+              - column:
+                  name: message_id
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: deduplication_primary_key
+              - column:
+                  name: source_id
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: deduplication_primary_key
+              - column:
+                  name: source
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: deduplication_primary_key

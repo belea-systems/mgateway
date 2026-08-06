@@ -3,7 +3,6 @@ package ru.gitverse.bizzareowl.mgateway.gateway;
 import org.springframework.stereotype.Component;
 import ru.gitverse.bizzareowl.mgateway.messaging.AlertMessageSender;
 
-import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,7 +25,7 @@ public class AlertMessageHandler {
         }
 
         return new ProcessedAlertMessage(
-                UUID.randomUUID(), rawAlertMessage.message(), rawAlertMessage.messageData(), ZonedDateTime.now()
+                UUID.randomUUID(), rawAlertMessage.message(), rawAlertMessage.messageId(), rawAlertMessage.messageData(), rawAlertMessage.sentAt()
         );
     }
 
