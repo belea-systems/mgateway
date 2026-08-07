@@ -1,9 +1,8 @@
 services:
+
   mgateway:
-    build:
-      context: .
-      tags:
-        - belea/mgateway:latest-snapshot
+    image: belea/mgateway:latest-snapshot
+    build: .
     ports:
       - "8791:8080"
     depends_on:

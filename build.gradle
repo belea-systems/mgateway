@@ -12,6 +12,15 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    manifest {
+        attributes (
+            'Implementation-Title': 'mgateway',
+            'Implementation-Version': version
+        )
+    }
+}
+
 dependencies {
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
