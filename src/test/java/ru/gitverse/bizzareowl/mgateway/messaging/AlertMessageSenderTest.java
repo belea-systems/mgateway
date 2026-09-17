@@ -13,6 +13,8 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
+import ru.gitverse.bizzareowl.mgateway.gateway.MessageSource;
+import ru.gitverse.bizzareowl.mgateway.gateway.MessageSourceData;
 import ru.gitverse.bizzareowl.mgateway.gateway.ProcessedAlertMessage;
 
 import java.time.ZonedDateTime;
@@ -44,7 +46,7 @@ public class AlertMessageSenderTest {
         final UUID uuid = UUID.randomUUID();
         final ZonedDateTime receivingTime = ZonedDateTime.now();
         final ProcessedAlertMessage processedAlertMessage = new ProcessedAlertMessage(
-        uuid, 100, "message", receivingTime, null);
+        uuid, "message", new MessageSourceData("id", "name", MessageSource.TELEGRAM), receivingTime);
 
         final Consumer<UUID, ProcessedAlertMessage> consumer = consumerFactory.createConsumer();
         embeddedKafkaBroker.consumeFromAnEmbeddedTopic(consumer, alertMessagesTopic);
@@ -55,7 +57,9 @@ public class AlertMessageSenderTest {
 
         Assertions.assertThat(record.key()).isEqualTo(uuid);
         Assertions.assertThat(record.value().message()).isEqualTo("message");
-        Assertions.assertThat(record.value().sourceId()).isEqualTo(100);
+        Assertions.assertThat(record.value().data().id()).isEqualTo("id");
+        Assertions.assertThat(record.value().data().name()).isEqualTo("name");
+        Assertions.assertThat(record.value().data().source()).isEqualTo(MessageSource.TELEGRAM);
         Assertions.assertThat(record.value().receivingTime()).isEqualTo(receivingTime);
 
     }
