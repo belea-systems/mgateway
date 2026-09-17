@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gitverse.bizzareowl.mgateway.gateway.AlertMessagesToHandlerRouter;
-import ru.gitverse.bizzareowl.mgateway.messaging.ProcessedAlertMessage;
+import ru.gitverse.bizzareowl.mgateway.gateway.ProcessedAlertMessage;
 import ru.gitverse.bizzareowl.mgateway.web.dto.MessageSavedResponseDto;
 import ru.gitverse.bizzareowl.mgateway.web.dto.RawAlertMessageDto;
 import ru.gitverse.bizzareowl.mgateway.web.dto.mappers.RawAlertMassageDtoMapper;
