@@ -20,7 +20,7 @@ public record RawAlertMessageDto(
         String messageId,
 
         @Schema(
-                description = "Время отправки собщения в формате ISO с часовой зоной UTC+0",
+                description = "Время отправки сообщения в формате ISO с часовой зоной UTC+0",
                 example = "2023-01-01T12:23:43Z"
         )
         Instant sentAt,
