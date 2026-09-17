@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.gitverse.bizzareowl.mgateway.gateway.ProcessedAlertMessage;
 import ru.gitverse.bizzareowl.mgateway.messaging.AlertMessageSender;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Component
@@ -33,7 +33,7 @@ public class AlertMessageSenderImpl implements AlertMessageSender {
             throw new IllegalArgumentException("Message cannot be null");
         }
 
-        if (processedAlertMessage.receivingTime().isAfter(ZonedDateTime.now())) {
+        if (processedAlertMessage.sentAt().isAfter(Instant.now())) {
             throw new IllegalArgumentException("Illegal receiving time value");
         }
 
