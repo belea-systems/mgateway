@@ -12,7 +12,8 @@ public record RawAlertMessageDto(
         String message,
 
         @Schema(
-                description = "Тело сообщения в сериализованном формате"
+                description = "Тело сообщения в сериализованном формате",
+                implementation = MessageSourceDataDto.class
         )
         @NotNull
         MessageSourceDataDto messageData) {
