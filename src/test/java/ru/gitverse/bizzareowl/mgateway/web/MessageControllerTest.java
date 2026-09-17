@@ -15,11 +15,12 @@ import ru.gitverse.bizzareowl.mgateway.gateway.MessageSource;
 import ru.gitverse.bizzareowl.mgateway.gateway.MessageSourceData;
 import ru.gitverse.bizzareowl.mgateway.gateway.ProcessedAlertMessage;
 import ru.gitverse.bizzareowl.mgateway.persistence.DeduplicationRepository;
+import ru.gitverse.bizzareowl.mgateway.persistence.entities.MessageDeduplicationRecordPrimaryKey;
 import ru.gitverse.bizzareowl.mgateway.web.dto.MessageSourceDataDto;
 import ru.gitverse.bizzareowl.mgateway.web.dto.RawAlertMessageDto;
 import tools.jackson.databind.ObjectMapper;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,12 +45,12 @@ public class MessageControllerTest {
     public void sendMessage_withValidMessage_shouldSaveMessage() {
 
         final MessageSourceDataDto messageSourceDataDto = new MessageSourceDataDto("id", "name", "TELEGRAM");
-        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", messageSourceDataDto);
+        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", "id", Instant.now(), messageSourceDataDto);
         final UUID uuid = UUID.randomUUID();
 
         Mockito.when(alertMessageHandler.handle(Mockito.any())).thenReturn(
                 new ProcessedAlertMessage(
-                        uuid, "message", new MessageSourceData("id", "name", MessageSource.TELEGRAM), ZonedDateTime.now()
+                        uuid, "message", "id", new MessageSourceData("id", "name", MessageSource.TELEGRAM), Instant.now()
                 )
         );
 
@@ -59,7 +60,7 @@ public class MessageControllerTest {
                 .exchange();
 
         assertThat(testResult).hasStatus(HttpStatus.CREATED);
-        assertThat(testResult).bodyJson().extractingPath("$.messageId").isEqualTo(uuid);
+        assertThat(testResult).bodyJson().extractingPath("$.messageId").isEqualTo(uuid.toString());
     }
 
     @Test
@@ -67,9 +68,11 @@ public class MessageControllerTest {
     public void sendMessage_secondTimeWithValidMessage_shouldReturnNoContent() {
 
         final MessageSourceDataDto messageSourceDataDto = new MessageSourceDataDto("id", "name", "TELEGRAM");
-        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", messageSourceDataDto);
+        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", "id", Instant.now(), messageSourceDataDto);
 
-        Mockito.when(deduplicationRepository.exists(Mockito.any())).thenReturn(true);
+        Mockito.when(deduplicationRepository.existsById(
+                new MessageDeduplicationRecordPrimaryKey("id", "id", MessageSource.TELEGRAM))
+        ).thenReturn(true);
 
         MvcTestResult testResult = mockMvcTester.post().uri("/emergency-alerts" )
                 .content(objectMapper.writeValueAsBytes(rawAlertMessageDto))
@@ -83,7 +86,7 @@ public class MessageControllerTest {
     @DisplayName("Send message with invalid body test")
     public void sendMessage_withInvalidMessage_shouldDiscardMessage() {
 
-        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", null);
+        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", null, null, null);
 
         final MvcTestResult result = mockMvcTester.post().uri("/emergency-alerts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +95,7 @@ public class MessageControllerTest {
 
         assertThat(result).hasStatus(HttpStatus.BAD_REQUEST);
         assertThat(result).bodyJson().extractingPath("$.title").isNotEmpty();
-        assertThat(result).bodyJson().extractingPath("$.status").isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result).bodyJson().extractingPath("$.status").isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(result).bodyJson().extractingPath("$.detail").isNotEmpty();
 
 
