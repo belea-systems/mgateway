@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ru.gitverse.bizzareowl.mgateway.web.dto.ErrorResponseDto;
 import ru.gitverse.bizzareowl.mgateway.web.dto.MessageSavedResponseDto;
 import ru.gitverse.bizzareowl.mgateway.web.dto.RawAlertMessageDto;
 
@@ -49,6 +50,7 @@ public interface MessageController {
                             responseCode = "400",
                             description = "Ответ в случае если сообщение содержит ошибки и не может быть принято",
                             content = @Content(
+                                    schema = @Schema(implementation = ErrorResponseDto.class),
                                     mediaType = "application/json"
                             )
                     )

@@ -16,19 +16,19 @@ public final class AlertGateway {
     }
 
     public void processMessage(final RawAlertMessage rawAlertMessage) {
-        if (!this.sourceIdToHandlersMap.containsKey(rawAlertMessage.sourceId)) {
-            throw new IllegalArgumentException(String.format("Unknown source of alert message: %d", rawAlertMessage.sourceId));
+        if (!this.sourceIdToHandlersMap.containsKey(rawAlertMessage.sourceId())) {
+            throw new IllegalArgumentException(String.format("Unknown source of alert message: %d", rawAlertMessage.sourceId()));
         }
 
-        if (rawAlertMessage.body == null) {
+        if (rawAlertMessage.body() == null) {
             throw new IllegalArgumentException("Raw message must contain non-null body");
         }
 
-        if (rawAlertMessage.body.length == 0) {
+        if (rawAlertMessage.body().length == 0) {
             throw new IllegalArgumentException("Raw message body cannot be empty");
         }
 
-        this.sourceIdToHandlersMap.get(rawAlertMessage.sourceId).handle(rawAlertMessage);
+        this.sourceIdToHandlersMap.get(rawAlertMessage.sourceId()).handle(rawAlertMessage);
     }
 
 }
