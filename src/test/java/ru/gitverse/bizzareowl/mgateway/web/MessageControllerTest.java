@@ -19,6 +19,7 @@ import ru.gitverse.bizzareowl.mgateway.web.dto.MessageSourceDataDto;
 import ru.gitverse.bizzareowl.mgateway.web.dto.RawAlertMessageDto;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -39,7 +40,7 @@ public class MessageControllerTest {
     public void sendMessage_withValidMessage_shouldSaveMessage() {
 
         final MessageSourceDataDto messageSourceDataDto = new MessageSourceDataDto("id", "name", "TELEGRAM");
-        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", messageSourceDataDto);
+        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", "id", Instant.now(), messageSourceDataDto);
         final UUID uuid = UUID.randomUUID();
 
         Mockito.when(alertMessageHandler.handle(Mockito.any())).thenReturn(
@@ -63,7 +64,7 @@ public class MessageControllerTest {
     @DisplayName("Send message with invalid body test")
     public void sendMessage_withInvalidMessage_shouldDiscardMessage() {
 
-        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", null);
+        final RawAlertMessageDto rawAlertMessageDto = new RawAlertMessageDto("Message", "id", Instant.now(), null);
 
         final MvcTestResult result = mockMvcTester.post().uri("/emergency-alerts")
                 .contentType(MediaType.APPLICATION_JSON)
