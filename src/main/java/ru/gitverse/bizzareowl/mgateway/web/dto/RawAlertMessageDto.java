@@ -28,18 +28,6 @@ public record RawAlertMessageDto(
         Instant sentAt,
 
         @Schema(
-                description = "Идентификатор сообщения",
-                example = "818888389123"
-        )
-        String messageId,
-
-        @Schema(
-                description = "Время отправки сообщения в формате ISO с часовой зоной UTC+0",
-                example = "2023-01-01T12:23:43Z"
-        )
-        Instant sentAt,
-
-        @Schema(
                 description = "Тело сообщения в сериализованном формате",
                 implementation = MessageSourceDataDto.class
         )
