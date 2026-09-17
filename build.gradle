@@ -31,6 +31,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
 
+    implementation("org.postgresql:postgresql:42.7.13")
+    implementation("org.springframework.boot:spring-boot-starter-liquibase")
+
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter:1.21.4")
+    testImplementation("org.testcontainers:testcontainers:2.0.5")
+    testImplementation("org.testcontainers:testcontainers-postgresql:2.0.5")
+
     compileOnly("org.projectlombok:lombok:1.18.46")
     annotationProcessor("org.projectlombok:lombok:1.18.46")
     testCompileOnly("org.projectlombok:lombok:1.18.46")
