@@ -1,6 +1,8 @@
 application:
   alert-messages-topic: alerts
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
   datasource:
     url: jdbc:postgresql://localhost:5432/alert-deduplication
     username: alerts
